@@ -10,8 +10,8 @@
 #define WORDCOUNT 100000
 #define INFILE "c:\\Users\\repat\\Downloads\\words_final.txt"
 
-//#define WORDCOUNT 10000
-//#define INFILE "c:\\Users\\repat\\Downloads\\words_10000.txt"
+//#define WORDCOUNT 50000
+//#define INFILE "c:\\Users\\repat\\Downloads\\words_50000.txt"
 
 using namespace std;
 
@@ -47,7 +47,7 @@ void calcLongestOverlap(const std::string * const words, int w1Index, int w2Inde
 	}
 
 	std::pair<int, int> wordsInOrder;
-	int overlap;
+	int overlap = 0;
 	if (o1_2 >= o2_1) {
 		wordsInOrder = std::make_pair(w1Index, w2Index);
 		overlap = o1_2;
@@ -56,17 +56,15 @@ void calcLongestOverlap(const std::string * const words, int w1Index, int w2Inde
 		overlap = o2_1;
 	}
 
-	auto search = overlapsByLength.find(overlap);
-	if (search != overlapsByLength.end()) {
-		search->second.insert(search->second.end(), wordsInOrder);
-	} else {
-		std::vector<std::pair<int, int>> vec = { wordsInOrder };
-		overlapsByLength.insert({ overlap, vec });
-	};
-}
-
-bool checkEmptyPair(const std::pair<int, int> & pair) {
-	return pair.first == -1 && pair.second == -1;
+	if (overlap > 0) {
+		auto search = overlapsByLength.find(overlap);
+		if (search != overlapsByLength.end()) {
+			search->second.insert(search->second.end(), wordsInOrder);
+		} else {
+			std::vector<std::pair<int, int>> vec = { wordsInOrder };
+			overlapsByLength.insert({ overlap, vec });
+		}
+	}
 }
 
 void includePair(std::unordered_map<int, std::pair<int, int>> & neighboursByWord, const std::pair<int, int> & pair) {
@@ -127,7 +125,6 @@ int main()
 	std::ofstream outFile;
 
 	std::string * words = new std::string[WORDCOUNT];
-	int * order = new int[WORDCOUNT];
 
 	int i = 0;
 
@@ -201,6 +198,5 @@ int main()
 	}
 
 	delete[] words;
-	delete[] order;
 	return 0;
 }
