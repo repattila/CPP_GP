@@ -6,7 +6,7 @@
 #include <string>
 #include <fstream>
 
-#define INFILE "c:\\Users\\repat\\Downloads\\result8.txt"
+#define INFILE "c:\\Users\\repat\\Downloads\\words_6.txt"
 
 bool checkOverlap(const std::string & w1, const std::string & w2, int w1L, int length) {
 	for (int i = length; i > 0; i--) {
@@ -23,9 +23,12 @@ int calcLongestOverlap(const std::string * const words) {
 	int w2L = words[1].length();
 	int minLength = w1L < w2L ? w1L : w2L;
 
-	for (int o = 1; o <= minLength; o++) {
-		if (checkOverlap(words[0], words[1], w1L, o))
+	for (int o = minLength; o > 0; o--) {
+		if (checkOverlap(words[0], words[1], w1L, o)) {
 			o1_2 = o;
+			
+			break;
+		}
 	}
 
 	return o1_2;
@@ -38,7 +41,7 @@ int main()
 	std::ifstream inFile(INFILE);
 	if (inFile.is_open()) {
 		std::string words[2];
-		int wordCount = 0;
+		unsigned int wordCount = 0;
 		int i = 0;
 
 		while (std::getline(inFile, words[i]))
@@ -46,7 +49,7 @@ int main()
 			wordCount++;
 
 			if (i == 1) {
-				unsigned int overlap = calcLongestOverlap(words);
+				int overlap = calcLongestOverlap(words);
 				sumLength += (words[1].length() - overlap);
 
 				if (overlap < words[1].length()) {
