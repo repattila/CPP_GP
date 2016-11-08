@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1477696024 source:c:\users\repat\dropbox\develop\cpp\padlo\main.cpp
+	<iostream>
+	<sstream>
+	<stdio.h>
+	<math.h>
+
