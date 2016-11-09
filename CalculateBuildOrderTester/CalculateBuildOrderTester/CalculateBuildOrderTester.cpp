@@ -11,8 +11,8 @@
 #include <random>
 #include <string>
 
-#define MAX_SIZE 2
-#define MAX_RUNS 2
+#define MAX_SIZE 5
+#define MAX_RUNS 10
 
 int myrandom(int i) { return std::rand() % i; }
 
@@ -23,7 +23,7 @@ void build(int x, int y, int width, int height, std::vector<std::vector<int>> & 
 	if (upper < height) {
 		if (buildings[upper][x] == 4)
 			buildings[upper][x] = 1;
-		else
+		else if (buildings[upper][x] > 0)
 			buildings[upper][x] += 1;
 	}
 
@@ -31,7 +31,7 @@ void build(int x, int y, int width, int height, std::vector<std::vector<int>> & 
 	if (lower >= 0) {
 		if (buildings[lower][x] == 4)
 			buildings[lower][x] = 1;
-		else
+		else if (buildings[lower][x] > 0)
 			buildings[lower][x] += 1;
 	}
 
@@ -39,7 +39,7 @@ void build(int x, int y, int width, int height, std::vector<std::vector<int>> & 
 	if (right < width) {
 		if (buildings[y][right] == 4)
 			buildings[y][right] = 1;
-		else
+		else if (buildings[y][right] > 0)
 			buildings[y][right] += 1;
 	}
 
@@ -47,7 +47,7 @@ void build(int x, int y, int width, int height, std::vector<std::vector<int>> & 
 	if (left >= 0) {
 		if (buildings[y][left] == 4)
 			buildings[y][left] = 1;
-		else
+		else if (buildings[y][left] > 0)
 			buildings[y][left] += 1;
 	}
 }
