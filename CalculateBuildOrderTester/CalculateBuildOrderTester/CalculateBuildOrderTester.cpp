@@ -11,8 +11,9 @@
 #include <random>
 #include <string>
 
-#define MAX_SIZE 5
-#define MAX_RUNS 10
+#define MAX_SIZE 10
+#define MAX_RUNS_SQUARE 10
+#define MAX_RUNS_RECT 100
 
 int myrandom(int i) { return std::rand() % i; }
 
@@ -52,12 +53,8 @@ void build(int x, int y, int width, int height, std::vector<std::vector<int>> & 
 	}
 }
 
-bool runTest(int width, int height) {
-	std::cout << "Running test with width: " << width << " and height: "
-		<< height << '\n';
-
-	std::vector<std::vector<int>> buildings;
-	for (int i = 0; i < height; i++ ) {
+void initBuildings(std::vector<std::vector<int>> & buildings, int width, int height) {
+	for (int i = 0; i < height; i++) {
 		std::vector<int> row = {};
 
 		for (int j = 0; j < width; j++) {
@@ -66,6 +63,32 @@ bool runTest(int width, int height) {
 
 		buildings.push_back(row);
 	}
+}
+
+bool testResult(const std::vector<std::pair<size_t, size_t>> & solution, const std::vector<std::vector<int>> & buildings, int width, int height) {
+	std::vector<std::vector<int>> buildingsBySolution;
+	initBuildings(buildingsBySolution, width, height);
+
+	for (auto coord : solution) {
+		build(coord.second, coord.first, width, height, buildingsBySolution);
+	}
+
+	for (int i = 0; i < height; i++) {
+		for (int j = 0; j < width; j++) {
+			if (buildings[i][j] != buildingsBySolution[i][j])
+				return false;
+		}
+	}
+
+	return true;
+}
+
+bool runTest(int width, int height) {
+	std::cout << "Running test with width: " << width << " and height: "
+		<< height << '\n';
+
+	std::vector<std::vector<int>> buildings;
+	initBuildings(buildings, width, height);
 
 	std::vector<std::pair<int, int>> coords;
 	for (int i = 0; i < height; i++) {
@@ -82,15 +105,13 @@ bool runTest(int width, int height) {
 	std::vector<std::pair<size_t, size_t>> solution;
 	CalculateBuildOrder(buildings, solution);
 
-	if (solution[0].first == coords[0].first && solution[0].second == coords[0].second) {
+	if (testResult(solution, buildings, width, height)) {
 		std::cout << "Test successful." << '\n';
 		std::cout << '\n';
 
 		return true;
 	} else {
 		std::cout << "Test failed." << '\n';
-		std::cout << "Expected: (" << coords[0].first << ", " << coords[0].second << ")\n";
-		std::cout << "Computed: (" << solution[0].first << ", " << solution[0].second << ")\n";
 		std::cout << '\n';
 
 		std::string outFilename = "FailedInputs.txt";
@@ -128,7 +149,7 @@ int main()
 	std::uniform_int_distribution<int> uni(1, MAX_SIZE);
 
 	// Random squares
-	for (int i = 0; i < MAX_RUNS; i++) {
+	for (int i = 0; i < MAX_RUNS_SQUARE; i++) {
 		int length = uni(rng);
 
 		std::cout << "Random side length: "
@@ -139,7 +160,7 @@ int main()
 	}
 	
 	// Random rectangles
-	for (int i = 0; i < MAX_RUNS; i++) {
+	for (int i = 0; i < MAX_RUNS_RECT; i++) {
 		int width = uni(rng);
 		int height = uni(rng);
 
