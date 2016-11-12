@@ -5,7 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#define THREADCOUNT 1000
+#define THREADCOUNT 1
 #define BASE 10.0
 #define EXP 9.0
 
@@ -18,7 +18,7 @@ __global__ void addColumnKernel(double * results, const double * const length)
 	results[i] = 0;
 
 	double shortPartCount = i * (*length) + 1;
-	double sqrt2PartCount = 1;
+	double sqrt2PartCount = i;
 
 	double maxLength = (i + 1) * (*length);
 	while (shortPartCount <= maxLength) {
